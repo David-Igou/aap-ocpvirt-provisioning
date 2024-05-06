@@ -1,2 +1,2 @@
-plugin: redhat.openshift_virtualization.kubevirt
+plugin: kubevirt.core.kubevirt
 connections:
