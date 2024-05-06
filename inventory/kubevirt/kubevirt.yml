@@ -1,4 +1,4 @@
 plugin: kubevirt.core.kubevirt
 connections:
   - namespaces:
-      - igou
+      - vm-1111
