@@ -1,0 +1,13 @@
+---
+ocp_api: https://api.openshift.cluster:6443
+inventory_sa_token: "changeme"
+provisioner_sa_token: "changeme"
+git_repo: https://github.com/David-Igou/aap-ocpvirt-provisioning.git
+aap_organization: igou
+ansible_user_private_key: |-
+  -----BEGIN OPENSSH PRIVATE KEY-----
+  -----END OPENSSH PRIVATE KEY-----
+ansible_user_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFPs4Ix5OQSAQnC/TLjxVGyzX+1ClHpWE2+6sT6ufVGR"
+controller_hostname: https://aap.apps.openshift.cluster
+controller_username: cac-user
+controller_password: "foobar"
