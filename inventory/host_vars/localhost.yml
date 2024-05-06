@@ -7,7 +7,7 @@ controller_credentials:
   - name: "{{ aap_organization }}_ansible_user"
     credential_type: Machine
     organization: "{{ aap_organization }}"
-    description: ansible user ssh
+    description: ansible_user ssh credentials
     inputs:
       username: "ansible_user"
       ssh_key_data: "{{ ansible_user_private_key }}"
@@ -18,17 +18,17 @@ controller_credentials:
     organization: "{{ aap_organization }}"
     description: "Kubernetes SA token for ocpvirt inventory"
     inputs:
-      kube_api_token: "changeme"
-      kube_api_host: "changeme"
+      kube_api_token: "{{ inventory_sa_token }}"
+      kube_api_host: "{{ ocp_api }}"
       verify_ssl: false
 
   - name: "{{ aap_organization }}_ocpvirt-deployer-sa-token"
     credential_type: "{{ aap_organization }}_k8s_token"
     organization: "{{ aap_organization }}"
-    description: "Kubernetes SA token for ocpvirt inventory"
+    description: "Kubernetes SA token for ocpvirt VM Deployments"
     inputs:
-      kube_api_token: "changeme"
-      kube_api_host: "changeme"
+      kube_api_token: "{{ deployer_sa_token }}"
+      kube_api_host: "{{ ocp_api }}"
       verify_ssl: false
 
 #controller_credential_types:
@@ -72,11 +72,12 @@ controller_inventories:
 controller_inventory_sources:
   - name: ocpvirt_inventory_github
     source: scm
-    source_project: ocpvirt_inventory
+    source_project: ocpvirt_ansible
     inventory: ocpvirt_inventory
     credential: "{{ aap_organization }}_ocpvirt-inventory-sa-token"
     overwrite: true
     overwrite_vars: true
+    source_path: "inventory/"
     update_cache_timeout: 0
 
 
