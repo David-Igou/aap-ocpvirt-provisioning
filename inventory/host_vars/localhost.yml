@@ -1,0 +1,88 @@
+---
+ansible_connection: local
+ansible_python_interpreter: "{{ ansible_playbook_python }}"
+gather_facts: false
+
+controller_credentials:
+  - name: "{{ aap_organization }}_ansible_user"
+    credential_type: Machine
+    organization: "{{ aap_organization }}"
+    description: ansible user ssh
+    inputs:
+      username: "ansible_user"
+      ssh_key_data: "{{ ansible_user_private_key }}"
+      become_method: sudo
+
+  - name: "{{ aap_organization }}_ocpvirt-inventory-sa-token"
+    credential_type: "{{ aap_organization }}_k8s_token"
+    organization: "{{ aap_organization }}"
+    description: "Kubernetes SA token for ocpvirt inventory"
+    inputs:
+      kube_api_token: "changeme"
+      kube_api_host: "changeme"
+      verify_ssl: false
+
+  - name: "{{ aap_organization }}_ocpvirt-deployer-sa-token"
+    credential_type: "{{ aap_organization }}_k8s_token"
+    organization: "{{ aap_organization }}"
+    description: "Kubernetes SA token for ocpvirt inventory"
+    inputs:
+      kube_api_token: "changeme"
+      kube_api_host: "changeme"
+      verify_ssl: false
+
+#controller_credential_types:
+# - name: "{{ aap_organization }}_k8s_token"
+#   description: "Kubernetes API injected via env vars for the kubernetes.core collection"
+#   inputs:
+# fields:
+# - secret: true
+#   type: string
+#   id: kube_api_token
+#   label: "Kubernetes API Token"
+# - secret: false
+#   type: string
+#   id: kube_api_host
+#   label: "Kubernetes API hostname, e.g https://kubeapi.myorg.systems:6443"
+# - type: boolean
+#   id: verify_ssl
+#   label: "Verify SSL"
+#   injectors:
+# env:
+#   K8S_AUTH_API_KEY: !unsafe "{{ kube_api_token }}"
+#   K8S_AUTH_HOST: !unsafe "{{ kube_api_host }}"
+#   K8S_AUTH_VERIFY_SSL: !unsafe "{{ verify_ssl }}"
+
+
+controller_projects:
+- name: ocpvirt_ansible
+  organization: "{{ aap_organization }}"
+  scm_branch: main
+  scm_clean: 'no'
+  scm_delete_on_update: 'no'
+  scm_type: git
+  scm_update_on_launch: 'yes'
+  scm_url: "{{ git_repo }}"
+
+controller_inventories:
+  - name: ocpvirt_inventory
+    description: ocpvirt inventory
+    organization: "{{ aap_organization }}"
+
+controller_inventory_sources:
+  - name: ocpvirt_inventory_github
+    source: scm
+    source_project: ocpvirt_inventory
+    inventory: ocpvirt_inventory
+    credential: "{{ aap_organization }}_ocpvirt-inventory-sa-token"
+    overwrite: true
+    overwrite_vars: true
+    update_cache_timeout: 0
+
+
+#controller_templates:
+
+
+
+#controller_workflows:
+
