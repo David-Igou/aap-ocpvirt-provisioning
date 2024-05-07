@@ -7,8 +7,8 @@ This repository contains automation for OCP, AAP, and OCP Virtualization provisi
 ## Prerequisites
 
 * An Openshift cluster running:
-** Openshift Virtualization Operator
-** Ansible Automation Platform Operator
+* Openshift Virtualization Operator
+* Ansible Automation Platform Operator
 
 ## Create openshift serviceaccounts and obtain tokens
 
