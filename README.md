@@ -2,9 +2,13 @@
 
 It is recommended that you fork this repo and experiment with your own changes.
 
+This repository contains automation for OCP, AAP, and OCP Virtualization provisioning. All playbooks are not needed to start provisioning, they are only included for readers that are potentially unfamilar with parts of the platform. The Openshift Virtualization inventories and playbooks can easily be integrated into a pre-existing AAP Project and Inventory in your instance without running the configure-aap playbook.
+
 ## Prerequisites
 
-WIP
+* An Openshift cluster running:
+** Openshift Virtualization Operator
+** Ansible Automation Platform Operator
 
 ## Create openshift serviceaccounts and obtain tokens
 
@@ -34,6 +38,7 @@ inventory_sa_token: "changeme"
 provisioner_sa_token: "changeme"
 git_repo: https://github.com/David-Igou/aap-ocpvirt-provisioning.git
 aap_organization: igou
+ansible_user: cloud-user
 ansible_user_private_key: |-
   -----BEGIN OPENSSH PRIVATE KEY-----
   -----END OPENSSH PRIVATE KEY-----
@@ -41,6 +46,18 @@ ansible_user_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFPs4Ix5OQSAQnC/TL
 controller_hostname: https://aap.apps.openshift.cluster
 controller_username: cac-user
 controller_password: "foobar"
+```
+
+### Optional: Set the scope of Openshift Virtualization Inventory
+
+If you are working in a multi-tenant environment, you might want to update the inventory plugin to only discover VirtualMachines from certain namespaces, for example:
+
+```yaml
+---
+plugin: redhat.openshift_virtualization.kubevirt
+connections:
+  - namespaces:
+      - igou
 ```
 
 ## Configure AAP
