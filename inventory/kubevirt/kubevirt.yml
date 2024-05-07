@@ -1,3 +1,5 @@
 ---
 plugin: kubevirt.core.kubevirt
 connections:
+  - namespaces:
+      - igou
