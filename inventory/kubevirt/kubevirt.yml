@@ -1,5 +1,3 @@
 ---
 plugin: kubevirt.core.kubevirt
 connections:
-  - namespaces:
-      - vm-1111
