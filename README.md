@@ -62,6 +62,12 @@ connections:
 
 ## Configure AAP
 
+To configure your AAP instance, create an SCM Project using your forked repository, and then create supporting objects
+
+<Table of objects and values will go here>
+
+
+
 ### Ansible
 
 ```
