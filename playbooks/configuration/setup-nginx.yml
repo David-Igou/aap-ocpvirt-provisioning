@@ -1,0 +1,13 @@
+---
+- name: configure nginx
+  hosts: "{{ host }}"
+  gather_facts: true
+  tasks:
+    - name: Install nginx
+      ansible.builtin.package:
+        name: nginx
+
+    - name: Start nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
