@@ -25,7 +25,7 @@
   tasks:
 
     - name: Create a Virtual Machine
-      openshift.virtualization.kubevirt_vm:
+      redhat.openshift_virtualization.kubevirt_vm:
         state: "{{ vm_state }}"
         name: "{{ vm_name }}"
         namespace: "{{ vm_namespace }}"

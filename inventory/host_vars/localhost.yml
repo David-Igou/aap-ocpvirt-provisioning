@@ -84,7 +84,7 @@ controller_inventory_sources:
 controller_templates:
   - name: "openshiftvirtualization-deploy_vm"
     description: Deploy a vm with openshit virtualization
-    playbook: playbooks/ocpvirt/ocpvirt_vm.yaml
+    playbook: playbooks/ocpvirt/ocpvirt_vm.yml
     credentials:
       - "{{ aap_organization }}_ocpvirt-provisioner-sa-token"
     project: ocpvirt_ansible
