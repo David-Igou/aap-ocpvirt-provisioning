@@ -6,9 +6,12 @@ This repository contains automation for OCP, AAP, and OCP Virtualization provisi
 
 ## Prerequisites
 
-* An Openshift cluster running:
+An Openshift cluster running:
+
 * Openshift Virtualization Operator
 * Ansible Automation Platform Operator
+
+It is assumed in this exercise that AAP and the Openshift Virtualization VMs all use the internal cluster network. That said, the steps should be similar if you are utilizing an external AAP and use Multus on the OCP cluster, provided you update the inventory plugin to query for the external network interfaces on the VMs.
 
 ## Create openshift serviceaccounts and obtain tokens
 

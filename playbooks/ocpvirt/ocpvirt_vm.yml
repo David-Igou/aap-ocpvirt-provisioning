@@ -1,0 +1,72 @@
+---
+- name: Deploy OCPVirt VM
+  hosts: localhost
+  gather_facts: false
+  vars:
+    vm_name: "testvm"
+    vm_namespace: "igou"
+    vm_datavolume_size: "30Gi"
+    vm_datavolume_source_datasource: "rhel9"
+    vm_instancetype:
+      name: u1.small
+      kind: VirtualMachineClusterInstancetype
+    vm_state: "present"
+    vm_user_data:  |-
+      #cloud-config
+      users:
+        - name: igou
+          gecos: "igou"
+          sudo: ALL=(ALL) NOPASSWD:ALL
+          shell: /bin/bash
+          groups: users,docker,video,input
+          ssh-authorized-keys:
+            - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFPs4Ix5OQSAQnC/TLjxVGyzX+1ClHpWE2+6sT6ufVGR
+
+  tasks:
+
+    - name: Create a Virtual Machine
+      openshift.virtualization.kubevirt_vm:
+        state: "{{ vm_state }}"
+        name: "{{ vm_name }}"
+        namespace: "{{ vm_namespace }}"
+        running: true
+        wait: true
+        instancetype: "{{ vm_instancetype }}"
+        data_volume_templates:
+          - apiVersion: cdi.kubevirt.io/v1beta1
+            kind: DataVolume
+            metadata:
+              creationTimestamp: null
+              name: "{{ vm_name }}"
+            spec:
+              sourceRef:
+                kind: DataSource
+                name: "{{ vm_datavolume_source_datasource }}"
+                namespace: openshift-virtualization-os-images
+              storage:
+                resources:
+                  requests:
+                    storage: "{{ vm_datavolume_size }}"
+        spec:
+          domain:
+            devices:
+              disks:
+                - disk:
+                    bus: virtio
+                  name: rootdisk
+                - disk:
+                    bus: virtio
+                  name: cloudinitdisk
+              interfaces:
+                - masquerade: {}
+                  name: default
+          networks:
+            - name: default
+              pod: {}
+          volumes:
+          - dataVolume:
+              name: "{{ vm_name }}"
+            name: rootdisk
+          - cloudInitNoCloud:
+              userDataBase64: "{{ vm_user_data | b64encode }}"
+            name: cloudinitdisk

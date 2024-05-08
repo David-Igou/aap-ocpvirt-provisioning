@@ -81,8 +81,36 @@ controller_inventory_sources:
     update_cache_timeout: 0
 
 
-#controller_templates:
-
+controller_templates:
+  - name: "openshiftvirtualization-deploy_vm"
+    description: Deploy a vm with openshit virtualization
+    playbook: playbooks/ocpvirt/ocpvirt_vm.yaml
+    credentials:
+      - "{{ aap_organization }}_ocpvirt-provisioner-sa-token"
+    project: ocpvirt_ansible
+    job_type: run
+    inventory: ocpvirt_inventory
+    verbosity: 2
+    ask_variables_on_launch: true
+    extra_vars:
+      vm_name: "testvm"
+      vm_namespace: "igou"
+      vm_datavolume_size: "30Gi"
+      vm_datavolume_source_datasource: "rhel9"
+      vm_instancetype:
+        name: u1.small
+        kind: VirtualMachineClusterInstancetype
+      vm_state: "present"
+      vm_user_data:  |-
+        #cloud-config
+        users:
+          - name: igou
+            gecos: "igou"
+            sudo: ALL=(ALL) NOPASSWD:ALL
+            shell: /bin/bash
+            groups: users,docker,video,input
+            ssh-authorized-keys:
+              - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFPs4Ix5OQSAQnC/TLjxVGyzX+1ClHpWE2+6sT6ufVGR
 
 
 #controller_workflows:
