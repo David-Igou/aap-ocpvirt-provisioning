@@ -1,6 +1,7 @@
 ---
 - name: configure nginx
   hosts: "{{ host }}"
+  become: true
   gather_facts: true
   tasks:
     - name: Install nginx
