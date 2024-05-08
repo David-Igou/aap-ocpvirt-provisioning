@@ -82,9 +82,10 @@ controller_inventory_sources:
 
 
 controller_templates:
-  - name: "openshiftvirtualization-deploy_vm"
+  - name: "Provision OCPVirt VM"
     description: Deploy a vm with openshit virtualization
     playbook: playbooks/ocpvirt/ocpvirt_vm.yml
+    organization: "{{ aap_organization }}"
     credentials:
       - "{{ aap_organization }}_ocpvirt-provisioner-sa-token"
     project: ocpvirt_ansible
@@ -111,7 +112,51 @@ controller_templates:
             groups: users,docker,video,input
             ssh-authorized-keys:
               - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFPs4Ix5OQSAQnC/TLjxVGyzX+1ClHpWE2+6sT6ufVGR
+  - name: "Install Nginx"
+    description: Deploy a vm with openshit virtualization
+    playbook: playbooks/configuration/setup-nginx.yml
+    organization: "{{ aap_organization }}"
+    credentials:
+      - "{{ aap_organization }}_ansible_user"
+    project: ocpvirt_ansible
+    job_type: run
+    inventory: ocpvirt_inventory
+    verbosity: 2
+    ask_variables_on_launch: true
+    extra_vars:
+      host: "testvm"
 
-
-#controller_workflows:
-
+controller_workflows:
+  - name: "End to End deploy new host and configure nginx"
+    description: Provision and configure nginx
+    survey_enabled: true
+    allow_simultaneous: true
+    inventory: ocpvirt_inventory
+    organization: "{{ aap_organization }}"
+    simplified_workflow_nodes:
+      - identifier: node001
+        all_parents_must_converge: false
+        unified_job_template: kubevirt-deploy_vm
+        success_nodes:
+          - node002
+      - identifier: node002
+        all_parents_must_converge: false
+        unified_job_template:
+          name: ocpvirt_inventory_github
+          inventory:
+            organization:
+              name: "{{ aap_organization }}"
+              type: organization
+            name: ocpvirt_inventory
+            type: inventory
+          type: inventory_source
+        success_nodes:
+          - node003
+      - identifier: node003
+        all_parents_must_converge: false
+        unified_job_template: "Install Nginx"
+    survey_spec: {}
+    extra_vars:
+      vm_name: "vmname"
+      vm_namespace: "default"
+      vm_dv_source_url: ""
