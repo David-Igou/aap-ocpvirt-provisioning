@@ -13,6 +13,11 @@ An Openshift cluster running:
 
 It is assumed in this exercise that AAP and the Openshift Virtualization VMs all use the internal cluster network. That said, the steps should be similar if you are utilizing an external AAP and use Multus on the OCP cluster, provided you update the inventory plugin to query for the external network interfaces on the VMs.
 
+## Install Ansible dependencies
+
+#TODO, show example ansible.cfg
+
+
 ## Create openshift serviceaccounts and obtain tokens
 
 ```bash
@@ -84,3 +89,6 @@ If you have an execution environment containing the dependencies, you can use it
 
 `ansible-navigator run playbooks/aap/configure-aap.yml -e "@aap_vars.yml" -i inventory/`
 
+##
+
+When your Inventory and SCM source are configured,

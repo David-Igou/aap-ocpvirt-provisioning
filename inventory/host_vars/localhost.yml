@@ -106,7 +106,6 @@ controller_templates:
         #cloud-config
         users:
           - name: igou
-            gecos: "igou"
             sudo: ALL=(ALL) NOPASSWD:ALL
             shell: /bin/bash
             groups: users,docker,video,input
@@ -134,12 +133,12 @@ controller_workflows:
     inventory: ocpvirt_inventory
     organization: "{{ aap_organization }}"
     simplified_workflow_nodes:
-      - identifier: node001
+      - identifier: "Provision OCPVirt VM"
         all_parents_must_converge: false
-        unified_job_template: kubevirt-deploy_vm
+        unified_job_template:  "Provision OCPVirt VM"
         success_nodes:
-          - node002
-      - identifier: node002
+          - "ocpvirt inventory update"
+      - identifier: ocpvirt inventory update
         all_parents_must_converge: false
         unified_job_template:
           name: ocpvirt_inventory_github
@@ -151,12 +150,12 @@ controller_workflows:
             type: inventory
           type: inventory_source
         success_nodes:
-          - node003
-      - identifier: node003
+          - "Install Nginx"
+      - identifier: "Install Nginx"
         all_parents_must_converge: false
         unified_job_template: "Install Nginx"
     survey_spec: {}
     extra_vars:
       vm_name: "vmname"
-      vm_namespace: "default"
-      vm_dv_source_url: ""
+      vm_namespace: "igou"
+      vm_datavolume_source_datasource: "centos-stream9"

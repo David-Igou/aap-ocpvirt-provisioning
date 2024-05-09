@@ -15,7 +15,6 @@
       #cloud-config
       users:
         - name: igou
-          gecos: "igou"
           sudo: ALL=(ALL) NOPASSWD:ALL
           shell: /bin/bash
           groups: users,docker,video,input
@@ -70,3 +69,13 @@
           - cloudInitNoCloud:
               userDataBase64: "{{ vm_user_data | b64encode }}"
             name: cloudinitdisk
+
+    - name: set host stat
+      ansible.builtin.set_stats:
+        data:
+          host: "{{ vm_namespace }}-{{ vm_name }}"
+        per_host: false
+
+    - name: sleep for 10 seconds so inventory can catch up
+      ansible.builtin.pause:
+        seconds: 10
