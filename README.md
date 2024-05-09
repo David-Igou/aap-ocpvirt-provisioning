@@ -17,11 +17,9 @@ It is assumed in this exercise that AAP and the Openshift Virtualization VMs all
 
 This repository makes use of the following Ansible collections:
 
-- `redhat.openshift_virtualization`
+- `infra.controller_configuration==2.7.1`
 
-- `infra.controller_configuration`
-
-- `kubevirt.core`
+- `redhat.openshift_virtualization==1.3.2`
 
 and the following plugins:
 
