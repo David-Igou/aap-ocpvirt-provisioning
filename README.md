@@ -15,8 +15,55 @@ It is assumed in this exercise that AAP and the Openshift Virtualization VMs all
 
 ## Install Ansible dependencies
 
-#TODO, show example ansible.cfg
+This repository makes use of the following Ansible collections:
 
+- `redhat.openshift_virtualization`
+
+- `infra.controller_configuration`
+
+- `kubevirt.core`
+
+and the following plugins:
+
+- `redhat.openshift_virtualization.kubevirt`
+
+These collections and plugins are available for download via the ansible-galaxy automation hub. In order to download these collections you first need to ensure that `/etc/ansible/ansible.cfg` file is configured to interact with RedHat automation hub using your `offline token`.
+
+You can find your offline token by navigating to https://console.redhat.com/ansible/automation-hub/token
+
+![](./docs/pics/token_url.png)
+
+**_Click "Load Token" to obtain your token._**
+
+You will also need to grab your `SSO URL` and published `Server URL`. These url's can be found on the same page as your offline token.
+
+
+Once you have your `offline token`, `sso url`, and `server url` you need to update your `/etc/ansible/ansible.cfg` file to the following configuration
+
+    [galaxy]
+    server_list = automation_hub, galaxy
+
+    ## config for galaxy server (listed in server_list)
+    [galaxy_server.galaxy]
+    url=https://galaxy.ansible.com
+
+    ## config for automation_hub (listed in server_list)
+    [galaxy_server.automation_hub]
+    url=<Server URL>
+    auth_url=<SSO URL>
+
+    token=<offline token>
+
+
+If your `ansible.cfg` is configured correctly. You shoule be able to run the following command successfully
+
+    $ ansible-galaxy install -r requirements.yml
+
+![](./docs/pics/successful_install.png)
+
+If you recieve this error message then your `ansible.cfg` is failing to authenticate properly. Please review your `/etc/ansible/ansible.cfg` 
+
+![](./docs/pics/failed_install.png)
 
 ## Create openshift serviceaccounts and obtain tokens
 
